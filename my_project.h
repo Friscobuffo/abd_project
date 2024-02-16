@@ -271,7 +271,10 @@ float** computeDensitiesFromAllNodesSmarter(Graph* graph) {
             }
         }
     }
-    int cutVertexInCommon[numBiconnectedComponents][numBiconnectedComponents];
+
+    int** cutVertexInCommon = (int**)malloc(numBiconnectedComponents*sizeof(int*));
+    for (int i=0; i<numBiconnectedComponents; i++)
+        cutVertexInCommon[i] = (int*)malloc(numBiconnectedComponents*sizeof(int));
     for (int i=0; i<numBiconnectedComponents; i++)
         for (int j=0; j<numBiconnectedComponents; j++)
             cutVertexInCommon[i][j] = -1;
@@ -296,8 +299,12 @@ float** computeDensitiesFromAllNodesSmarter(Graph* graph) {
             }
         }
     }
-    int globalNodesAtDistance[numNodes][numNodes];
-    int globalEdgesAtDistance[numNodes][numNodes];
+    int** globalNodesAtDistance = (int**)malloc(numNodes*sizeof(int*));
+    for (int i=0; i<numNodes; i++)
+        globalNodesAtDistance[i] = (int*)malloc(numNodes*sizeof(int));
+    int** globalEdgesAtDistance = (int**)malloc(numNodes*sizeof(int*));
+    for (int i=0; i<numNodes; i++)
+        globalEdgesAtDistance[i] = (int*)malloc(numNodes*sizeof(int));
     for (int i=0; i<numNodes; i++)
         for (int j=0; j<numNodes; j++) {
             globalNodesAtDistance[i][j] = 0;
@@ -330,9 +337,11 @@ float** computeDensitiesFromAllNodesSmarter(Graph* graph) {
     // nodes at distance 0 should be always 1, but it becomes more if the cut vertex partecipates
     // in more than one biconnected component, so initializing all those values back to 1
     for (int i=0; i<numNodes; i++)
-        globalNodesAtDistance[i][0] = 1;        
+        globalNodesAtDistance[i][0] = 1;
     // needed so biconnected comps dont get visited multiple times from the same node (in particular cut vertices)
-    int nodeVisitedBiconnectedComponent[numNodes][numBiconnectedComponents];
+    int** nodeVisitedBiconnectedComponent = (int**)malloc(numNodes*sizeof(int*));
+    for (int i=0; i<numNodes; i++)
+        nodeVisitedBiconnectedComponent[i] = (int*)malloc(numBiconnectedComponents*sizeof(int));
     for (int i=0; i<numNodes; i++)
         for (int j=0; j<numBiconnectedComponents; j++)
             nodeVisitedBiconnectedComponent[i][j] = 0;
@@ -434,6 +443,22 @@ float** computeDensitiesFromAllNodesSmarter(Graph* graph) {
     }
     for (int i=0; i<numCutVertices; i++)
         freeQueue(cutVerticesNeighbors[i], free);
+    
+    for (int i=0; i<numNodes; i++)
+        free(globalNodesAtDistance[i]);
+    free(globalNodesAtDistance);
+    for (int i=0; i<numNodes; i++)
+        free(globalEdgesAtDistance[i]);
+    free(globalEdgesAtDistance);
+
+    for (int i=0; i<numBiconnectedComponents; i++)
+        free(cutVertexInCommon[i]);
+    free(cutVertexInCommon);
+
+    for (int i=0; i<numNodes; i++)
+        free(nodeVisitedBiconnectedComponent[i]);
+    free(nodeVisitedBiconnectedComponent);
+
     return densitiesFromAllNodes;
 }
 

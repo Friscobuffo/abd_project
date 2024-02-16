@@ -1,14 +1,15 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <time.h>
 #include "my_project.h"
 
 void testOnGraph(Graph* graph) {
     int numNodes = graph->numNodes;
 
-    printGraph(graph);
-    printf("\n");
-    computeAndPrintBiconnectedComponents(graph);
+    // printGraph(graph);
+    // printf("\n");
+    // computeAndPrintBiconnectedComponents(graph);
 
     Timer* timer = (Timer*)malloc(sizeof(Timer));
 
@@ -22,9 +23,9 @@ void testOnGraph(Graph* graph) {
     stopTimer(timer);
     printf("Time taken smart: %f milliseconds\n", elapsedTime(timer));
 
-    printf("\n");
-    printf("densities:\n");
-    printMatrixOfFloats(densitiesFromAllNodesSmarter, numNodes);
+    // printf("\n");
+    // printf("densities:\n");
+    // printMatrixOfFloats(densitiesFromAllNodesSmarter, numNodes);
 
     if (!areFloatMatricesAreEqual(densitiesFromAllNodesNaive, densitiesFromAllNodesSmarter, numNodes))
         printf("densities are different: error\n");
@@ -114,20 +115,31 @@ void randomTestGoodGraphs(int numberOfTests, int numNodes, int numEdges, int num
     free(timer);
 }
 
-int main() {
+int main(int argc, char* argv[]) {
     srand((unsigned int)time(NULL));
-    Graph* graph = importGraphFromFile("graphs/slides");
+    char* fileName = argv[1];
+    char* folder = "graphs/";
+    char* filePath = malloc(strlen(fileName) + strlen(folder) + 1);
+    strcpy(filePath, folder);
+    strcat(filePath, fileName);
+    Graph* graph = importGraphFromFile(filePath);
     testOnGraph(graph);
     int* coreness = computeCorenessOfGraph(graph);
-    printf("coreness:\n");
-    printArrayOfInts(coreness, graph->numNodes);
+    int counter = 0;
+    for (int i=0; i<graph->numNodes; i++)
+        if (coreness[i] == 1)
+            counter++;
+    printf("percent nodes with core 1: %f\n", (float)counter/graph->numNodes);
+    // printf("coreness:\n");
+    // printArrayOfInts(coreness, graph->numNodes);
     free(coreness);
     freeGraph(graph);
+
+
     // printf("\n");
     // speedTestRandomGraphs(100, 100, 150);
     // printf("\n");
     // randomTestGoodGraphs(15, 40, 160, 15);
-    // printf("hiv\n");
-    // testOnGraphFromFile("graphs/hiv");
+    free(filePath);
     return 0;
 }
