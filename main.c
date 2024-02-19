@@ -4,7 +4,7 @@
 #include <time.h>
 #include "my_project.h"
 
-void testOnGraph(Graph* graph) {
+void testOnGraph(Graph* graph, int tests) {
     int numNodes = graph->numNodes;
 
     // printGraph(graph);
@@ -12,32 +12,44 @@ void testOnGraph(Graph* graph) {
     // computeAndPrintBiconnectedComponents(graph);
 
     Timer* timer = (Timer*)malloc(sizeof(Timer));
+    double totalTimeNaive = 0.0;
+    double totalTimeSmarter = 0.0;
 
-    startTimer(timer);
-    float** densitiesFromAllNodesNaive = computeDensitiesFromAllNodesNaive(graph);
-    stopTimer(timer);
-    printf("Time taken naive: %f milliseconds\n", elapsedTime(timer));
+    for (int i=0; i<tests; i++) {
+        printf("test number [%d]\n", i);
+        startTimer(timer);
+        float** densitiesFromAllNodesNaive = computeDensitiesFromAllNodesNaive(graph);
+        stopTimer(timer);
+        double time = elapsedTime(timer);
+        totalTimeNaive += time;
+        printf("Time taken naive: %f milliseconds\n", time);
 
-    startTimer(timer);
-    float** densitiesFromAllNodesSmarter = computeDensitiesFromAllNodesSmarter(graph);
-    stopTimer(timer);
-    printf("Time taken smart: %f milliseconds\n", elapsedTime(timer));
+        startTimer(timer);
+        float** densitiesFromAllNodesSmarter = computeDensitiesFromAllNodesSmarter(graph);
+        stopTimer(timer);
+        time = elapsedTime(timer);
+        totalTimeSmarter += time;
+        printf("Time taken smart: %f milliseconds\n", time);
+        if (!areFloatMatricesAreEqual(densitiesFromAllNodesNaive, densitiesFromAllNodesSmarter, numNodes))
+            printf("densities are different: error\n");
+
+        freeSquareMatrixOfFloats(densitiesFromAllNodesNaive, numNodes);
+        freeSquareMatrixOfFloats(densitiesFromAllNodesSmarter, numNodes);
+    }
 
     // printf("\n");
     // printf("densities:\n");
     // printMatrixOfFloats(densitiesFromAllNodesSmarter, numNodes);
 
-    if (!areFloatMatricesAreEqual(densitiesFromAllNodesNaive, densitiesFromAllNodesSmarter, numNodes))
-        printf("densities are different: error\n");
+    printf("Total time taken naive: %f milliseconds\n", totalTimeNaive);
+    printf("Total time taken smart: %f milliseconds\n", totalTimeSmarter);
 
-    freeSquareMatrixOfFloats(densitiesFromAllNodesNaive, numNodes);
-    freeSquareMatrixOfFloats(densitiesFromAllNodesSmarter, numNodes);
     free(timer);
 }
 
 void testOnGraphFromFile(const char* filename) {
     Graph* graph = importGraphFromFile(filename);
-    testOnGraph(graph);
+    testOnGraph(graph, 1);
     freeGraph(graph);
 }
 
@@ -75,6 +87,24 @@ void speedTestRandomGraphs(int numberOfTests, int numNodes, int numEdges) {
     printf("total naive time: %f milliseconds\n", totalNaiveTime);
     printf("total smart time: %f milliseconds\n", totalSmartTime);
     printf("total fails: %d\n", fails);
+
+    FILE *file_pointer;
+    char string[100];
+    char temp[50];
+    sprintf(temp, "%f", totalNaiveTime);
+    strcpy(string, temp);
+    strcat(string, ",");
+    sprintf(temp, "%f", totalSmartTime);
+    strcat(string, temp);
+    strcat(string, "\n");
+    file_pointer = fopen("output.txt", "a");
+    if (file_pointer == NULL) {
+        printf("Unable to open file.\n");
+        exit(1);
+    }
+    fputs(string, file_pointer);
+    fclose(file_pointer);
+
     free(timer);
 }
 
@@ -112,34 +142,76 @@ void randomTestGoodGraphs(int numberOfTests, int numNodes, int numEdges, int num
     printf("total naive time: %f milliseconds\n", totalNaiveTime);
     printf("total smart time: %f milliseconds\n", totalSmartTime);
     printf("total fails: %d\n", fails);
+
+    FILE *file_pointer;
+    char string[100];
+    char temp[50];
+    sprintf(temp, "%f", totalNaiveTime);
+    strcpy(string, temp);
+    strcat(string, ",");
+    sprintf(temp, "%f", totalSmartTime);
+    strcat(string, temp);
+    strcat(string, "\n");
+    file_pointer = fopen("output2.txt", "a");
+    if (file_pointer == NULL) {
+        printf("Unable to open file.\n");
+        exit(1);
+    }
+    fputs(string, file_pointer);
+    fclose(file_pointer);
+
     free(timer);
 }
 
 int main(int argc, char* argv[]) {
     srand((unsigned int)time(NULL));
     char* fileName = argv[1];
+    if (!strcmp(fileName, "random")) {
+        remove("output.txt");
+        for (int i=2; i<50; i++) {
+            printf("%d\n", i);
+            speedTestRandomGraphs(20, 250, i*250);
+        }
+        printf("\n");
+        return 0;
+    }
+    if (!strcmp(fileName, "good-random")) {
+        remove("output2.txt");
+        
+        randomTestGoodGraphs(20, 25, 75, 10);
+        printf("\n");
+        
+        randomTestGoodGraphs(20, 50, 150, 5);
+        printf("\n");
+
+        randomTestGoodGraphs(20, 125, 375, 2);
+        printf("\n");
+
+        randomTestGoodGraphs(20, 250, 750, 1);
+        printf("\n");
+
+        return 0;
+    }
     char* folder = "graphs/";
     char* filePath = malloc(strlen(fileName) + strlen(folder) + 1);
     strcpy(filePath, folder);
     strcat(filePath, fileName);
     Graph* graph = importGraphFromFile(filePath);
-    testOnGraph(graph);
+    testOnGraph(graph, 5);
     int* coreness = computeCorenessOfGraph(graph);
     int counter = 0;
     for (int i=0; i<graph->numNodes; i++)
         if (coreness[i] == 1)
             counter++;
     printf("percent nodes with core 1: %f\n", (float)counter/graph->numNodes);
+    printf("number of nodes: %d\n", graph->numNodes);
+    printf("number of edges: %d\n", numberOfEdgesInGraph(graph));
+    
     // printf("coreness:\n");
     // printArrayOfInts(coreness, graph->numNodes);
     free(coreness);
     freeGraph(graph);
-
-
-    // printf("\n");
-    // speedTestRandomGraphs(100, 100, 150);
-    // printf("\n");
-    // randomTestGoodGraphs(15, 40, 160, 15);
     free(filePath);
+    
     return 0;
 }

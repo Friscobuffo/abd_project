@@ -5,6 +5,10 @@
 #include <stdio.h>
 #include <time.h>
 
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// NODE
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
 struct Node {
     void* data;
     struct Node* next;
@@ -18,6 +22,10 @@ Node* createNode(void* data) {
     node->next = NULL;
     return node;
 }
+
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// QUEUE
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 struct Queue {
     Node* first;
@@ -94,10 +102,6 @@ void printQueue(Queue* queue, void (*printFunction)(void*)) {
     printf("\n");
 }
 
-void printInt(void* data) {
-    printf("%d", *(int*)data);
-}
-
 void* removeLastElemFromQueue(Queue* queue) {
     // If the queue is empty, return NULL (you might want to handle this differently)
     if (isQueueEmpty(queue)) {
@@ -133,6 +137,14 @@ void freeEmptyQueue(Queue* queue) {
     free(queue);
 }
 
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// OTHER
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+void printInt(void* data) {
+    printf("%d", *(int*)data);
+}
+
 int generateRandomInt(int min, int max) {
     return min + rand() % (max - min + 1);
 }
@@ -148,6 +160,10 @@ void printArrayOfFloats(float arr[], int size) {
         printf("%.3f ", arr[i]);
     printf("\n");
 }
+
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// EDGE
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 struct Edge {
     int from;
@@ -168,7 +184,9 @@ void printEdge(void* edge) {
     printf("(%d-%d)", e->from, e->to);
 }
 
-// pair
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// PAIR
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 struct Pair {
     void* _left;
@@ -208,7 +226,9 @@ void freePair(Pair* pair) {
     free(pair);
 }
 
-// tuple
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// TUPLE
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 struct Tuple {
     void** _elements;
@@ -249,7 +269,9 @@ void freeTuple(Tuple* tuple) {
     free(tuple);
 }
 
-// square matrix
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// SQUARE MATRIX
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 void printMatrixOfInts(int** matrix, int size) {
     for (int i=0; i<size; i++)
@@ -281,7 +303,9 @@ int areFloatMatricesAreEqual(float** matrix1, float** matrix2, int size) {
     return 1;
 }
 
-// timer
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// TIMER
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 struct Timer {
     clock_t startTime;

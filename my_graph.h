@@ -5,7 +5,10 @@
 #include <stdlib.h>
 #include "my_utils.h"
 
-// undirected graph
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// UNDIRECTED GRAPH
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
 struct Graph {
     int numNodes;
     Node** adjacencyList;
@@ -210,6 +213,16 @@ Graph* importGraphFromFile(const char* filename) {
     return graph;
 }
 
+int numberOfEdgesInGraph(Graph* graph) {
+    int numberOfEdges = 0;
+    for (int i=0; i<graph->numNodes; i++)
+        numberOfEdges += graph->degree[i];
+    return numberOfEdges;
+}
+
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// BICONNECTED COMPONENTS
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 struct BiconnectedComponent {
     int id;
