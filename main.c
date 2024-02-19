@@ -108,6 +108,43 @@ void speedTestRandomGraphs(int numberOfTests, int numNodes, int numEdges) {
     free(timer);
 }
 
+void corenessDensitiesRandomGraphs(int numberOfTests, int numNodes) {
+    FILE *file_pointer;
+    file_pointer = fopen("output3.txt", "a");
+    char string[100];
+    char temp[50];
+    for (int i=2; i<numberOfTests+2; i++) {
+        printf("\r%d", i+1);
+        fflush(stdout);
+        Graph* graph = createRandomGraph(numNodes, numNodes*i);
+        while(!isGraphConnected(graph)) {
+            freeGraph(graph);
+            graph = createRandomGraph(numNodes, numNodes*i);
+        }
+        int* coreness = computeCorenessOfGraph(graph);
+        float** densitiesFromAllNodes = computeDensitiesFromAllNodesNaive(graph);
+        for (int n=0; n<numNodes; n++) {
+            double average = 0.0;
+            for (int j=1; j<4; j++)
+                average += densitiesFromAllNodes[n][j];
+            // average /= 3.0;
+            sprintf(temp, "%f", average);
+            strcpy(string, temp);
+            strcat(string, ",");
+            sprintf(temp, "%d", coreness[n]);
+            strcat(string, temp);
+            strcat(string, "\n");
+            fputs(string, file_pointer);
+        }
+        // smart
+        freeSquareMatrixOfFloats(densitiesFromAllNodes, numNodes);
+        freeGraph(graph);
+        free(coreness);
+    }
+    printf("\n");
+    fclose(file_pointer);
+}
+
 void randomTestGoodGraphs(int numberOfTests, int numNodes, int numEdges, int numBicComps) {
     printf("speed tests good random graphs\n");
     Timer* timer = (Timer*)malloc(sizeof(Timer));
@@ -189,6 +226,13 @@ int main(int argc, char* argv[]) {
 
         randomTestGoodGraphs(20, 250, 750, 1);
         printf("\n");
+
+        return 0;
+    }
+    if (!strcmp(fileName, "coreness")) {
+        remove("output3.txt");
+        
+        corenessDensitiesRandomGraphs(30, 100);
 
         return 0;
     }

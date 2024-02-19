@@ -2,19 +2,20 @@ Flat profile:
 
 Each sample counts as 0.01 seconds.
   %   cumulative   self              self     total           
- time   seconds   seconds    calls  ms/call  ms/call  name    
- 96.80    101.97   101.97   480517     0.21     0.21  _computeDistancesFromNode
-  1.78    103.85     1.88  6122952     0.00     0.00  addEdge
-  0.35    104.22     0.37                             main
-  0.24    104.47     0.25     2952     0.08     0.08  isGraphConnected
-  0.22    104.70     0.23      960     0.24     0.24  _dfsBiconnectedComponents
-  0.20    104.91     0.21      960     0.22    42.06  computeDensitiesFromAllNodesNaive
-  0.15    105.07     0.16      960     0.17    66.91  computeDensitiesFromAllNodesSmarter
-  0.10    105.18     0.11     1477     0.07     0.07  freeBiconnectedComponent
-  0.10    105.29     0.11                             _init
-  0.05    105.34     0.05     1477     0.03     1.31  createBiconnectedComponent
-  0.00    105.34     0.00     2437     0.00    41.84  _computeDistancesFromAllNodes
-  0.00    105.34     0.00      960     0.00     2.25  _computeBiconnectedComponents
+ time   seconds   seconds    calls   s/call   s/call  name    
+ 92.96    193.81   193.81        5    38.76    41.67  computeDensitiesFromAllNodesSmarter
+  6.66    207.69    13.88   105055     0.00     0.00  _computeDistancesFromNode
+  0.24    208.19     0.50        5     0.10     0.13  _computeBiconnectedComponents
+  0.06    208.31     0.12     7165     0.00     0.00  _dfsBiconnectedComponents
+  0.05    208.42     0.11                             _init
+  0.02    208.46     0.04    40850     0.00     0.00  createBiconnectedComponent
+  0.01    208.48     0.02        1     0.02     0.02  computeCorenessOfGraph
+  0.00    208.49     0.01    40850     0.00     0.00  freeBiconnectedComponent
+  0.00    208.49     0.00   123438     0.00     0.00  addEdge
+  0.00    208.49     0.00    40850     0.00     0.00  _computeDistancesFromAllNodes
+  0.00    208.49     0.00        1     0.00     0.00  freeGraph
+  0.00    208.49     0.00        1     0.00     0.00  importGraphFromFile
+  0.00    208.49     0.00        1     0.00   208.36  testOnGraph
 
  %         the percentage of the total running time of the
 time       program used by this function.
@@ -52,62 +53,66 @@ notice and this notice are preserved.
 		     Call graph (explanation follows)
 
 
-granularity: each sample hit covers 4 byte(s) for 0.01% of 105.34 seconds
+granularity: each sample hit covers 4 byte(s) for 0.00% of 208.49 seconds
 
 index % time    self  children    called     name
                                                  <spontaneous>
-[1]     99.9    0.37  104.86                 main [1]
-                0.16   64.07     960/960         computeDensitiesFromAllNodesSmarter [4]
-                0.21   40.17     960/960         computeDensitiesFromAllNodesNaive [5]
-                0.25    0.00    2952/2952        isGraphConnected [9]
-                0.00    0.00    2952/6122952     addEdge [8]
+[1]     99.9    0.00  208.38                 main [1]
+                0.00  208.36       1/1           testOnGraph [3]
+                0.02    0.00       1/1           computeCorenessOfGraph [10]
+                0.00    0.00       1/1           importGraphFromFile [14]
+                0.00    0.00       1/1           freeGraph [13]
 -----------------------------------------------
-              101.97    0.00  480517/480517      _computeDistancesFromAllNodes [3]
-[2]     96.8  101.97    0.00  480517         _computeDistancesFromNode [2]
+              193.81   14.55       5/5           testOnGraph [3]
+[2]     99.9  193.81   14.55       5         computeDensitiesFromAllNodesSmarter [2]
+                0.00   13.88   40850/40850       _computeDistancesFromAllNodes [5]
+                0.50    0.16       5/5           _computeBiconnectedComponents [6]
+                0.01    0.00   40850/40850       freeBiconnectedComponent [11]
 -----------------------------------------------
-                0.00   40.17     960/2437        computeDensitiesFromAllNodesNaive [5]
-                0.00   61.80    1477/2437        computeDensitiesFromAllNodesSmarter [4]
-[3]     96.8    0.00  101.97    2437         _computeDistancesFromAllNodes [3]
-              101.97    0.00  480517/480517      _computeDistancesFromNode [2]
+                0.00  208.36       1/1           main [1]
+[3]     99.9    0.00  208.36       1         testOnGraph [3]
+              193.81   14.55       5/5           computeDensitiesFromAllNodesSmarter [2]
 -----------------------------------------------
-                0.16   64.07     960/960         main [1]
-[4]     61.0    0.16   64.07     960         computeDensitiesFromAllNodesSmarter [4]
-                0.00   61.80    1477/2437        _computeDistancesFromAllNodes [3]
-                0.00    2.16     960/960         _computeBiconnectedComponents [6]
-                0.11    0.00    1477/1477        freeBiconnectedComponent [11]
+               13.88    0.00  105055/105055      _computeDistancesFromAllNodes [5]
+[4]      6.7   13.88    0.00  105055         _computeDistancesFromNode [4]
 -----------------------------------------------
-                0.21   40.17     960/960         main [1]
-[5]     38.3    0.21   40.17     960         computeDensitiesFromAllNodesNaive [5]
-                0.00   40.17     960/2437        _computeDistancesFromAllNodes [3]
+                0.00   13.88   40850/40850       computeDensitiesFromAllNodesSmarter [2]
+[5]      6.7    0.00   13.88   40850         _computeDistancesFromAllNodes [5]
+               13.88    0.00  105055/105055      _computeDistancesFromNode [4]
 -----------------------------------------------
-                0.00    2.16     960/960         computeDensitiesFromAllNodesSmarter [4]
-[6]      2.0    0.00    2.16     960         _computeBiconnectedComponents [6]
-                0.05    1.88    1477/1477        createBiconnectedComponent [7]
-                0.23    0.00     960/960         _dfsBiconnectedComponents [10]
+                0.50    0.16       5/5           computeDensitiesFromAllNodesSmarter [2]
+[6]      0.3    0.50    0.16       5         _computeBiconnectedComponents [6]
+                0.12    0.00    7165/7165        _dfsBiconnectedComponents [7]
+                0.04    0.00   40850/40850       createBiconnectedComponent [9]
 -----------------------------------------------
-                0.05    1.88    1477/1477        _computeBiconnectedComponents [6]
-[7]      1.8    0.05    1.88    1477         createBiconnectedComponent [7]
-                1.88    0.00 6120000/6122952     addEdge [8]
------------------------------------------------
-                             7120500             addEdge [8]
-                0.00    0.00    2952/6122952     main [1]
-                1.88    0.00 6120000/6122952     createBiconnectedComponent [7]
-[8]      1.8    1.88    0.00 6122952+7120500 addEdge [8]
-                             7120500             addEdge [8]
------------------------------------------------
-                0.25    0.00    2952/2952        main [1]
-[9]      0.2    0.25    0.00    2952         isGraphConnected [9]
------------------------------------------------
-                              239040             _dfsBiconnectedComponents [10]
-                0.23    0.00     960/960         _computeBiconnectedComponents [6]
-[10]     0.2    0.23    0.00     960+239040  _dfsBiconnectedComponents [10]
-                              239040             _dfsBiconnectedComponents [10]
------------------------------------------------
-                0.11    0.00    1477/1477        computeDensitiesFromAllNodesSmarter [4]
-[11]     0.1    0.11    0.00    1477         freeBiconnectedComponent [11]
+                               64205             _dfsBiconnectedComponents [7]
+                0.12    0.00    7165/7165        _computeBiconnectedComponents [6]
+[7]      0.1    0.12    0.00    7165+64205   _dfsBiconnectedComponents [7]
+                               64205             _dfsBiconnectedComponents [7]
 -----------------------------------------------
                                                  <spontaneous>
-[12]     0.1    0.11    0.00                 _init [12]
+[8]      0.1    0.11    0.00                 _init [8]
+-----------------------------------------------
+                0.04    0.00   40850/40850       _computeBiconnectedComponents [6]
+[9]      0.0    0.04    0.00   40850         createBiconnectedComponent [9]
+                0.00    0.00  102865/123438      addEdge [12]
+-----------------------------------------------
+                0.02    0.00       1/1           main [1]
+[10]     0.0    0.02    0.00       1         computeCorenessOfGraph [10]
+-----------------------------------------------
+                0.01    0.00   40850/40850       computeDensitiesFromAllNodesSmarter [2]
+[11]     0.0    0.01    0.00   40850         freeBiconnectedComponent [11]
+-----------------------------------------------
+                0.00    0.00   20573/123438      importGraphFromFile [14]
+                0.00    0.00  102865/123438      createBiconnectedComponent [9]
+[12]     0.0    0.00    0.00  123438         addEdge [12]
+-----------------------------------------------
+                0.00    0.00       1/1           main [1]
+[13]     0.0    0.00    0.00       1         freeGraph [13]
+-----------------------------------------------
+                0.00    0.00       1/1           main [1]
+[14]     0.0    0.00    0.00       1         importGraphFromFile [14]
+                0.00    0.00   20573/123438      addEdge [12]
 -----------------------------------------------
 
  This table describes the call tree of the program, and was sorted by
@@ -200,7 +205,8 @@ notice and this notice are preserved.
 
 Index by function name
 
-   [6] _computeBiconnectedComponents [12] _init            [7] createBiconnectedComponent
-   [3] _computeDistancesFromAllNodes [8] addEdge          [11] freeBiconnectedComponent
-   [2] _computeDistancesFromNode [5] computeDensitiesFromAllNodesNaive [9] isGraphConnected
-  [10] _dfsBiconnectedComponents [4] computeDensitiesFromAllNodesSmarter [1] main
+   [6] _computeBiconnectedComponents [12] addEdge         [13] freeGraph
+   [5] _computeDistancesFromAllNodes [10] computeCorenessOfGraph [14] importGraphFromFile
+   [4] _computeDistancesFromNode [2] computeDensitiesFromAllNodesSmarter [3] testOnGraph
+   [7] _dfsBiconnectedComponents [9] createBiconnectedComponent
+   [8] _init                  [11] freeBiconnectedComponent
